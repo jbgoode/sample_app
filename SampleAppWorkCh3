@@ -1,0 +1,816 @@
+Migrating to CreateMicroposts (20120129014343)
+==  CreateMicroposts: migrating ===============================================
+-- create_table(:microposts)
+   -> 0.0059s
+==  CreateMicroposts: migrated (0.0060s) ======================================
+
+[john@FedoraDev demo_app]$ gem install taps
+Fetching: sequel-3.20.0.gem (100%)
+Fetching: sinatra-1.0.gem (100%)
+Fetching: taps-0.3.23.gem (100%)
+Fetching: sqlite3-1.3.5.gem (100%)
+Building native extensions.  This could take a while...
+Successfully installed sequel-3.20.0
+Successfully installed sinatra-1.0
+Successfully installed taps-0.3.23
+Successfully installed sqlite3-1.3.5
+4 gems installed
+Installing ri documentation for sequel-3.20.0...
+Installing ri documentation for sinatra-1.0...
+Installing ri documentation for taps-0.3.23...
+Installing ri documentation for sqlite3-1.3.5...
+Installing RDoc documentation for sequel-3.20.0...
+Installing RDoc documentation for sinatra-1.0...
+Installing RDoc documentation for taps-0.3.23...
+Installing RDoc documentation for sqlite3-1.3.5...
+[john@FedoraDev demo_app]$ heroku db:push
+Loaded Taps v0.3.23
+Auto-detected local database: sqlite://db/development.sqlite3
+Warning: Data in the app 'electric-day-9901' will be overwritten and will not be recoverable.
+
+ !    WARNING: Potentially Destructive Action
+ !     This command will affect the app: electric-day-9901
+ !    To proceed, type "electric-day-9901" or re-run this command with --confirm electric-day-9901
+
+> electric-day-9901
+Sending schema
+Schema:        100% |==========================================| Time: 00:00:07
+Sending indexes
+schema_migrat: 100% |==========================================| Time: 00:00:00
+Sending data
+3 tables, 7 records
+schema_migrat: 100% |==========================================| Time: 00:00:00
+users:         100% |==========================================| Time: 00:00:00
+microposts:    100% |==========================================| Time: 00:00:00
+Resetting sequences
+[john@FedoraDev demo_app]$ cd ~/rails_projects
+[john@FedoraDev rails_projects]$ rails new sample_app -T
+      create  
+      create  README
+      create  Rakefile
+      create  config.ru
+      create  .gitignore
+      create  Gemfile
+      create  app
+      create  app/controllers/application_controller.rb
+      create  app/helpers/application_helper.rb
+      create  app/mailers
+      create  app/models
+      create  app/views/layouts/application.html.erb
+      create  config
+      create  config/routes.rb
+      create  config/application.rb
+      create  config/environment.rb
+      create  config/environments
+      create  config/environments/development.rb
+      create  config/environments/production.rb
+      create  config/environments/test.rb
+      create  config/initializers
+      create  config/initializers/backtrace_silencers.rb
+      create  config/initializers/inflections.rb
+      create  config/initializers/mime_types.rb
+      create  config/initializers/secret_token.rb
+      create  config/initializers/session_store.rb
+      create  config/locales
+      create  config/locales/en.yml
+      create  config/boot.rb
+      create  config/database.yml
+      create  db
+      create  db/seeds.rb
+      create  doc
+      create  doc/README_FOR_APP
+      create  lib
+      create  lib/tasks
+      create  lib/tasks/.gitkeep
+      create  log
+      create  log/server.log
+      create  log/production.log
+      create  log/development.log
+      create  log/test.log
+      create  public
+      create  public/404.html
+      create  public/422.html
+      create  public/500.html
+      create  public/favicon.ico
+      create  public/index.html
+      create  public/robots.txt
+      create  public/images
+      create  public/images/rails.png
+      create  public/stylesheets
+      create  public/stylesheets/.gitkeep
+      create  public/javascripts
+      create  public/javascripts/application.js
+      create  public/javascripts/controls.js
+      create  public/javascripts/dragdrop.js
+      create  public/javascripts/effects.js
+      create  public/javascripts/prototype.js
+      create  public/javascripts/rails.js
+      create  script
+      create  script/rails
+      create  tmp
+      create  tmp/sessions
+      create  tmp/sockets
+      create  tmp/cache
+      create  tmp/pids
+      create  vendor/plugins
+      create  vendor/plugins/.gitkeep
+[john@FedoraDev rails_projects]$ cd sam*
+[john@FedoraDev sample_app]$ gedit Gemfile
+
+** (gedit:1626): CRITICAL **: gedit_spell_checker_language_to_key: assertion `lang != NULL' failed
+[john@FedoraDev sample_app]$ bundle install
+Fetching source index for http://rubygems.org/
+Using rake (0.9.2.2) 
+Using abstract (1.0.0) 
+Using activesupport (3.0.1) 
+Using builder (2.1.2) 
+Using i18n (0.4.2) 
+Using activemodel (3.0.1) 
+Using erubis (2.6.6) 
+Using rack (1.2.5) 
+Using rack-mount (0.6.14) 
+Using rack-test (0.5.7) 
+Using tzinfo (0.3.31) 
+Using actionpack (3.0.1) 
+Using mime-types (1.17.2) 
+Using polyglot (0.3.3) 
+Using treetop (1.4.10) 
+Using mail (2.2.19) 
+Using actionmailer (3.0.1) 
+Using arel (1.0.1) 
+Using activerecord (3.0.1) 
+Using activeresource (3.0.1) 
+Using bundler (1.0.21) 
+Installing diff-lcs (1.1.3) 
+Installing nokogiri (1.5.0) with native extensions 
+Using thor (0.14.6) 
+Using railties (3.0.1) 
+Using rails (3.0.1) 
+Installing rspec-core (2.0.1) 
+Installing rspec-expectations (2.0.1) 
+Installing rspec-mocks (2.0.1) 
+Installing rspec (2.0.1) 
+Installing rspec-rails (2.0.1) 
+Using sqlite3-ruby (1.2.5) 
+Installing webrat (0.7.1) 
+Your bundle is complete! Use `bundle show [gemname]` to see where a bundled gem is installed.
+[john@FedoraDev sample_app]$ rails generate rspec:install
+      create  .rspec
+      create  spec
+      create  spec/spec_helper.rb
+      create  autotest
+      create  autotest/discover.rb
+[john@FedoraDev sample_app]$ git init
+Initialized empty Git repository in /home/john/rails_projects/sample_app/.git/
+[john@FedoraDev sample_app]$ git add .
+[john@FedoraDev sample_app]$ git commit -m "Initial commit"
+[master (root-commit) f6b793c] Initial commit
+ 42 files changed, 10354 insertions(+), 0 deletions(-)
+ create mode 100644 .gitignore
+ create mode 100644 .rspec
+ create mode 100644 Gemfile
+ create mode 100644 Gemfile.lock
+ create mode 100644 Gemfile~
+ create mode 100644 README
+ create mode 100644 Rakefile
+ create mode 100644 app/controllers/application_controller.rb
+ create mode 100644 app/helpers/application_helper.rb
+ create mode 100644 app/views/layouts/application.html.erb
+ create mode 100644 autotest/discover.rb
+ create mode 100644 config.ru
+ create mode 100644 config/application.rb
+ create mode 100644 config/boot.rb
+ create mode 100644 config/database.yml
+ create mode 100644 config/environment.rb
+ create mode 100644 config/environments/development.rb
+ create mode 100644 config/environments/production.rb
+ create mode 100644 config/environments/test.rb
+ create mode 100644 config/initializers/backtrace_silencers.rb
+ create mode 100644 config/initializers/inflections.rb
+ create mode 100644 config/initializers/mime_types.rb
+ create mode 100644 config/initializers/secret_token.rb
+ create mode 100644 config/initializers/session_store.rb
+ create mode 100644 config/locales/en.yml
+ create mode 100644 config/routes.rb
+ create mode 100644 db/seeds.rb
+ create mode 100644 doc/README_FOR_APP
+ create mode 100644 lib/tasks/.gitkeep
+ create mode 100644 public/404.html
+ create mode 100644 public/422.html
+ create mode 100644 public/500.html
+ create mode 100644 public/favicon.ico
+ create mode 100644 public/images/rails.png
+ create mode 100644 public/index.html
+ create mode 100644 public/javascripts/application.js
+ create mode 100644 public/javascripts/controls.js
+ create mode 100644 public/javascripts/dragdrop.js
+ create mode 100644 public/javascripts/effects.js
+ create mode 100644 public/javascripts/prototype.js
+ create mode 100644 public/javascripts/rails.js
+ create mode 100644 public/robots.txt
+ create mode 100644 public/stylesheets/.gitkeep
+ create mode 100755 script/rails
+ create mode 100644 spec/spec_helper.rb
+ create mode 100644 vendor/plugins/.gitkeep
+[john@FedoraDev sample_app]$ gedit README
+
+** (gedit:1935): CRITICAL **: gedit_spell_checker_language_to_key: assertion `lang != NULL' failed
+[john@FedoraDev sample_app]$ gt mv README README.markdown
+bash: gt: command not found...
+[john@FedoraDev sample_app]$ git mv README README.markdown
+[john@FedoraDev sample_app]$ git commit -a -m "Improved the README"
+[master 4d86b56] Improved the README
+ 2 files changed, 8 insertions(+), 256 deletions(-)
+ delete mode 100644 README
+ create mode 100644 README.markdown
+[john@FedoraDev sample_app]$ git remote add origin git@github.com:jbgoode/sample_app.git
+[john@FedoraDev sample_app]$ git push origin master
+Counting objects: 68, done.
+Delta compression using up to 2 threads.
+Compressing objects: 100% (51/51), done.
+Writing objects: 100% (68/68), 87.12 KiB, done.
+Total 68 (delta 3), reused 0 (delta 0)
+To git@github.com:jbgoode/sample_app.git
+ * [new branch]      master -> master
+[john@FedoraDev sample_app]$ heroku create
+Creating fierce-mountain-6195... done, stack is bamboo-mri-1.9.2
+http://fierce-mountain-6195.heroku.com/ | git@heroku.com:fierce-mountain-6195.git
+Git remote heroku added
+[john@FedoraDev sample_app]$ git push heroku master
+Counting objects: 68, done.
+Delta compression using up to 2 threads.
+Compressing objects: 100% (51/51), done.
+Writing objects: 100% (68/68), 87.12 KiB, done.
+Total 68 (delta 3), reused 0 (delta 0)
+
+-----> Heroku receiving push
+-----> Ruby/Rails app detected
+-----> Detected Rails is not set to serve static_assets
+       Installing rails3_serve_static_assets... done
+-----> Configure Rails 3 to disable x-sendfile
+       Installing rails3_disable_x_sendfile... done
+-----> Configure Rails to log to stdout
+       Installing rails_log_stdout... done
+-----> Gemfile detected, running Bundler version 1.0.7
+       Unresolved dependencies detected; Installing...
+       Using --without development:test
+       Fetching source index for http://rubygems.org/
+       Installing rake (0.9.2.2) 
+       Installing abstract (1.0.0) 
+       Installing activesupport (3.0.1) 
+       Installing builder (2.1.2) 
+       Installing i18n (0.4.2) 
+       Installing activemodel (3.0.1) 
+       Installing erubis (2.6.6) 
+       Installing rack (1.2.5) 
+       Installing rack-mount (0.6.14) 
+       Installing rack-test (0.5.7) 
+       Installing tzinfo (0.3.31) 
+       Installing actionpack (3.0.1) 
+       Installing mime-types (1.17.2) 
+       Installing polyglot (0.3.3) 
+       Installing treetop (1.4.10) 
+       Installing mail (2.2.19) 
+       Installing actionmailer (3.0.1) 
+       Installing arel (1.0.1) 
+       Installing activerecord (3.0.1) 
+       Installing activeresource (3.0.1) 
+       Using bundler (1.0.7) 
+       Installing thor (0.14.6) 
+       Installing railties (3.0.1) 
+       Installing rails (3.0.1) 
+       Installing sqlite3-ruby (1.2.5) with native extensions 
+       Your bundle is complete! It was installed into ./.bundle/gems/
+-----> Compiled slug size is 3.8MB
+-----> Launching... done, v4
+       http://fierce-mountain-6195.heroku.com deployed to Heroku
+
+To git@heroku.com:fierce-mountain-6195.git
+ * [new branch]      master -> master
+[john@FedoraDev sample_app]$ gedit public/hello.html
+
+** (gedit:2901): CRITICAL **: gedit_spell_checker_language_to_key: assertion `lang != NULL' failed
+[john@FedoraDev sample_app]$ rails s
+=> Booting WEBrick
+=> Rails 3.0.1 application starting in development on http://0.0.0.0:3000
+=> Call with -d to detach
+=> Ctrl-C to shutdown server
+[2012-01-29 15:39:05] INFO  WEBrick 1.3.1
+[2012-01-29 15:39:05] INFO  ruby 1.9.2 (2011-07-09) [x86_64-linux]
+[2012-01-29 15:39:05] INFO  WEBrick::HTTPServer#start: pid=2944 port=3000
+
+
+Started GET "/rails/info/properties" for 127.0.0.1 at 2012-01-29 15:39:37 -0800
+  Processing by Rails::InfoController#properties as HTML
+  SQL (0.5ms)   SELECT name
+ FROM sqlite_master
+ WHERE type = 'table' AND NOT name = 'sqlite_sequence'
+
+Rendered inline template (0.5ms)
+Completed 200 OK in 65ms (Views: 1.6ms | ActiveRecord: 0.5ms)
+
+
+Started GET "/rails/info/properties" for 127.0.0.1 at 2012-01-29 15:39:57 -0800
+  Processing by Rails::InfoController#properties as HTML
+Rendered inline template (0.6ms)
+Completed 200 OK in 2ms (Views: 1.4ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/rails/info/properties" for 127.0.0.1 at 2012-01-29 15:40:00 -0800
+  Processing by Rails::InfoController#properties as HTML
+Rendered inline template (0.6ms)
+Completed 200 OK in 2ms (Views: 1.3ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/rails/info/properties" for 127.0.0.1 at 2012-01-29 15:40:02 -0800
+  Processing by Rails::InfoController#properties as HTML
+Rendered inline template (0.4ms)
+Completed 200 OK in 1ms (Views: 0.9ms | ActiveRecord: 0.0ms)
+^C[2012-01-29 15:40:30] INFO  going to shutdown ...
+[2012-01-29 15:40:30] INFO  WEBrick::HTTPServer#start done.
+Exiting
+[john@FedoraDev sample_app]$ rm public/hello.html
+[john@FedoraDev sample_app]$ git checkout -b static-pages
+Switched to a new branch 'static-pages'
+[john@FedoraDev sample_app]$ generate controller Pages home contact
+bash: generate: command not found...
+[john@FedoraDev sample_app]$ rails generate controller Pages home contact
+      create  app/controllers/pages_controller.rb
+       route  get "pages/contact"
+       route  get "pages/home"
+      invoke  erb
+      create    app/views/pages
+      create    app/views/pages/home.html.erb
+      create    app/views/pages/contact.html.erb
+      invoke  rspec
+      create    spec/controllers/pages_controller_spec.rb
+      create    spec/views/pages
+      create    spec/views/pages/home.html.erb_spec.rb
+      create    spec/views/pages/contact.html.erb_spec.rb
+      invoke  helper
+      create    app/helpers/pages_helper.rb
+      invoke    rspec
+      create      spec/helpers/pages_helper_spec.rb
+[john@FedoraDev sample_app]$ cd config
+[john@FedoraDev config]$ ls -la
+total 40
+drwxrwxr-x.  5 john john 4096 Jan 29 09:29 .
+drwxrwxr-x. 15 john john 4096 Jan 29 09:39 ..
+-rw-rw-r--.  1 john john 1927 Jan 29 09:29 application.rb
+-rw-rw-r--.  1 john john  326 Jan 29 09:29 boot.rb
+-rw-rw-r--.  1 john john  538 Jan 29 09:29 database.yml
+-rw-rw-r--.  1 john john  153 Jan 29 09:29 environment.rb
+drwxrwxr-x.  2 john john 4096 Jan 29 09:29 environments
+drwxrwxr-x.  2 john john 4096 Jan 29 09:29 initializers
+drwxrwxr-x.  2 john john 4096 Jan 29 09:29 locales
+-rw-rw-r--.  1 john john 1835 Jan 30 11:54 routes.rb
+[john@FedoraDev config]$ cat routes.rb
+SampleApp::Application.routes.draw do
+  get "pages/home"
+
+  get "pages/contact"
+
+  # The priority is based upon order of creation:
+  # first created -> highest priority.
+
+  # Sample of regular route:
+  #   match 'products/:id' => 'catalog#view'
+  # Keep in mind you can assign values other than :controller and :action
+
+  # Sample of named route:
+  #   match 'products/:id/purchase' => 'catalog#purchase', :as => :purchase
+  # This route can be invoked with purchase_url(:id => product.id)
+
+  # Sample resource route (maps HTTP verbs to controller actions automatically):
+  #   resources :products
+
+  # Sample resource route with options:
+  #   resources :products do
+  #     member do
+  #       get 'short'
+  #       post 'toggle'
+  #     end
+  #
+  #     collection do
+  #       get 'sold'
+  #     end
+  #   end
+
+  # Sample resource route with sub-resources:
+  #   resources :products do
+  #     resources :comments, :sales
+  #     resource :seller
+  #   end
+
+  # Sample resource route with more complex sub-resources
+  #   resources :products do
+  #     resources :comments
+  #     resources :sales do
+  #       get 'recent', :on => :collection
+  #     end
+  #   end
+
+  # Sample resource route within a namespace:
+  #   namespace :admin do
+  #     # Directs /admin/products/* to Admin::ProductsController
+  #     # (app/controllers/admin/products_controller.rb)
+  #     resources :products
+  #   end
+
+  # You can have the root of your site routed with "root"
+  # just remember to delete public/index.html.
+  # root :to => "welcome#index"
+
+  # See how all your routes lay out with "rake routes"
+
+  # This is a legacy wild controller route that's not recommended for RESTful applications.
+  # Note: This route will make all actions in every controller accessible via GET requests.
+  # match ':controller(/:action(/:id(.:format)))'
+end
+[john@FedoraDev config]$ rails s
+=> Booting WEBrick
+=> Rails 3.0.1 application starting in development on http://0.0.0.0:3000
+=> Call with -d to detach
+=> Ctrl-C to shutdown server
+[2012-01-30 12:02:27] INFO  WEBrick 1.3.1
+[2012-01-30 12:02:27] INFO  ruby 1.9.2 (2011-07-09) [x86_64-linux]
+[2012-01-30 12:02:27] INFO  WEBrick::HTTPServer#start: pid=16880 port=3000
+
+
+Started GET "/pages/home" for 127.0.0.1 at 2012-01-30 12:02:43 -0800
+  Processing by PagesController#home as HTML
+Rendered pages/home.html.erb within layouts/application (2.0ms)
+Completed 200 OK in 7ms (Views: 6.0ms | ActiveRecord: 0.0ms)
+^C[2012-01-30 12:09:02] INFO  going to shutdown ...
+[2012-01-30 12:09:02] INFO  WEBrick::HTTPServer#start done.
+Exiting
+[john@FedoraDev config]$ git add .
+[john@FedoraDev config]$ git commit -am "Added a Pages controller"
+[static-pages 1cd48fc] Added a Pages controller
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+[john@FedoraDev config]$ gem install autotest -v 4.3.2
+Fetching: autotest-4.3.2.gem (100%)
+Successfully installed autotest-4.3.2
+1 gem installed
+Installing ri documentation for autotest-4.3.2...
+Installing RDoc documentation for autotest-4.3.2...
+[john@FedoraDev config]$ gem install autotest-rails-pure -v 4.1.0
+Fetching: autotest-rails-pure-4.1.0.gem (100%)
+Successfully installed autotest-rails-pure-4.1.0
+1 gem installed
+Installing ri documentation for autotest-rails-pure-4.1.0...
+Installing RDoc documentation for autotest-rails-pure-4.1.0...
+[john@FedoraDev config]$ gem install autotest-growl
+Fetching: autotest-growl-0.2.16.gem (100%)
+
+-------------------------------------------------------------------------------
+
+In order to use autotest-growl, install either the comprehensive 
+ZenTest gem or the lightweight autotest-standalone gem and then add the 
+following line to your ~/.autotest file:
+
+require 'autotest/growl'
+
+Make sure the notification service installed on your computer:
+
+http://growl.info (Growl for Mac OS X)
+http://growlforwindows.com (Growl for Windows)
+http://www.galago-project.org (libnotify for Linux)
+
+Mac OS X users only: Make sure you have an adequate version of Growl
+installed, take a look at the README for assistance.
+
+If Growl notifications are not always displayed, take a look at the README
+for assistance.
+
+For more information, feedback and bug submissions, please visit:
+
+http://www.bitcetera.com/products/autotest-growl
+
+If you like this gem, please consider to recommend me on Working with
+Rails, thank you!
+
+http://workingwithrails.com/recommendation/new/person/11706-sven-schwyn
+
+-------------------------------------------------------------------------------
+
+Successfully installed autotest-growl-0.2.16
+1 gem installed
+Installing ri documentation for autotest-growl-0.2.16...
+Installing RDoc documentation for autotest-growl-0.2.16...
+[john@FedoraDev config]$ 
+[john@FedoraDev config]$ gem install autotest-inotify
+Fetching: ffi-1.0.11.gem (100%)
+Building native extensions.  This could take a while...
+Fetching: rb-inotify-0.8.8.gem (100%)
+Fetching: autotest-inotify-0.0.6.gem (100%)
+Fetching: ZenTest-4.6.2.gem (100%)
+Successfully installed ffi-1.0.11
+Successfully installed rb-inotify-0.8.8
+Successfully installed autotest-inotify-0.0.6
+Successfully installed ZenTest-4.6.2
+4 gems installed
+Installing ri documentation for ffi-1.0.11...
+Installing ri documentation for rb-inotify-0.8.8...
+Installing ri documentation for autotest-inotify-0.0.6...
+Installing ri documentation for ZenTest-4.6.2...
+Installing RDoc documentation for ffi-1.0.11...
+Installing RDoc documentation for rb-inotify-0.8.8...
+Installing RDoc documentation for autotest-inotify-0.0.6...
+Installing RDoc documentation for ZenTest-4.6.2...
+[john@FedoraDev config]$ which autotest
+~/.rvm/gems/ruby-1.9.2-p290/bin/autotest
+[john@FedoraDev config]$ cd ..
+[john@FedoraDev sample_app]$ ls -la
+total 144
+drwxrwxr-x. 15 john john  4096 Jan 30 14:44 .
+drwxrwxr-x.  5 john john  4096 Jan 29 09:29 ..
+drwxrwxr-x.  7 john john  4096 Jan 29 09:29 app
+drwxrwxr-x.  2 john john  4096 Jan 29 09:35 autotest
+drwxrwxr-x.  5 john john  4096 Jan 29 09:29 config
+-rw-rw-r--.  1 john john   159 Jan 29 09:29 config.ru
+drwxrwxr-x.  2 john john  4096 Jan 29 15:39 db
+drwxrwxr-x.  2 john john  4096 Jan 29 09:29 doc
+-rw-rw-r--.  1 john john   800 Jan 29 09:33 Gemfile
+-rw-rw-r--.  1 john john   665 Jan 29 09:29 Gemfile~
+-rw-rw-r--.  1 john john  2216 Jan 29 09:34 Gemfile.lock
+drwxrwxr-x.  8 john john  4096 Jan 30 12:09 .git
+-rw-rw-r--.  1 john john    40 Jan 29 09:29 .gitignore
+drwxrwxr-x.  3 john john  4096 Jan 29 09:29 lib
+drwxrwxr-x.  2 john john  4096 Jan 29 09:29 log
+drwxrwxr-x.  5 john john  4096 Jan 29 15:40 public
+-rw-rw-r--.  1 john john   269 Jan 29 09:29 Rakefile
+-rw-rw-r--.  1 john john  9130 Jan 29 09:29 README~
+-rw-rw-r--.  1 john john   238 Jan 29 09:38 README.markdown
+-rw-rw-r--.  1 john john     9 Jan 29 09:35 .rspec
+-rw-rw-r--.  1 john john 19172 Jan 30 14:44 SampleAppWorkCh3
+-rw-rw-r--.  1 john john 19172 Jan 30 14:43 SampleAppWorkCh3~
+drwxr-xr-x.  2 john john  4096 Jan 29 09:29 script
+drwxrwxr-x.  5 john john  4096 Jan 30 11:54 spec
+drwxrwxr-x.  6 john john  4096 Jan 29 09:29 tmp
+drwxrwxr-x.  3 john john  4096 Jan 29 09:29 vendor
+[john@FedoraDev sample_app]$ gedit .autotest
+
+** (gedit:17739): CRITICAL **: gedit_spell_checker_language_to_key: assertion `lang != NULL' failed
+[john@FedoraDev sample_app]$ 
+[john@FedoraDev sample_app]$ git rm -r spec/views
+fatal: pathspec 'spec/views' did not match any files
+[john@FedoraDev sample_app]$ cd spec
+[john@FedoraDev spec]$ ls
+controllers  helpers  spec_helper.rb  views
+[john@FedoraDev spec]$ cd views
+[john@FedoraDev views]$ ls
+pages
+[john@FedoraDev views]$ cd pages
+[john@FedoraDev pages]$ ls
+contact.html.erb_spec.rb  home.html.erb_spec.rb
+[john@FedoraDev pages]$ pwd
+/home/john/rails_projects/sample_app/spec/views/pages
+[john@FedoraDev pages]$ cd ..
+[john@FedoraDev views]$ cd ..
+[john@FedoraDev spec]$ pwd
+/home/john/rails_projects/sample_app/spec
+[john@FedoraDev spec]$ cd ..
+[john@FedoraDev sample_app]$ git rm help
+fatal: pathspec 'help' did not match any files
+[john@FedoraDev sample_app]$ git help rm
+[john@FedoraDev sample_app]$ git rm -r spec/views
+fatal: pathspec 'spec/views' did not match any files
+[john@FedoraDev sample_app]$ git rm -r spec/helpers
+fatal: pathspec 'spec/helpers' did not match any files
+[john@FedoraDev sample_app]$ cd spec
+[john@FedoraDev spec]$ cd views
+[john@FedoraDev views]$ ls
+pages
+[john@FedoraDev views]$ cd pages
+[john@FedoraDev pages]$ ls
+contact.html.erb_spec.rb  home.html.erb_spec.rb
+[john@FedoraDev pages]$ cat con*
+require 'spec_helper'
+
+describe "pages/contact.html.erb" do
+  pending "add some examples to (or delete) #{__FILE__}"
+end
+[john@FedoraDev pages]$ cd ../../..
+[john@FedoraDev sample_app]$ pwd
+/home/john/rails_projects/sample_app
+[john@FedoraDev sample_app]$ rm -rf spec/views
+[john@FedoraDev sample_app]$ rm -rf spec/helpers
+[john@FedoraDev sample_app]$ gedit spec/controllers/pag*
+[john@FedoraDev sample_app]$ rspec spec/
+..
+
+Finished in 0.19118 seconds
+2 examples, 0 failures
+[john@FedoraDev sample_app]$ rspec spec/controllers/
+..
+
+Finished in 0.17944 seconds
+2 examples, 0 failures
+[john@FedoraDev sample_app]$ autotest
+loading autotest/rails_rspec2
+
+
+--------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[fbundle exec /home/john/.rvm/rubies/ruby-1.9.2-p290/bin/ruby -S /home/john/.rvm/gems/ruby-1.9.2-p290/gems/rspec-core-2.0.1/bin/rspec --autotest '/home/john/rails_projects/sample_app/spec/controllers/pages_controller_spec.rb'
+..
+
+Finished in 0.17884 seconds
+2 examples, 0 failures
+
+
+--------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[fbundle exec /home/john/.rvm/rubies/ruby-1.9.2-p290/bin/ruby -S /home/john/.rvm/gems/ruby-1.9.2-p290/gems/rspec-core-2.0.1/bin/rspec --autotest '/home/john/rails_projects/sample_app/spec/controllers/pages_controller_spec.rb'
+..F
+
+Failures:
+  1) PagesController GET 'about' should be successful
+     Failure/Error: get 'about'
+     No route matches {:controller=>"pages", :action=>"about"}
+     # ./spec/controllers/pages_controller_spec.rb:22:in `block (3 levels) in <top (required)>'
+
+Finished in 0.19004 seconds
+3 examples, 1 failure
+
+
+--------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[fbundle exec /home/john/.rvm/rubies/ruby-1.9.2-p290/bin/ruby -S /home/john/.rvm/gems/ruby-1.9.2-p290/gems/rspec-core-2.0.1/bin/rspec --autotest '/home/john/rails_projects/sample_app/spec/controllers/pages_controller_spec.rb'
+..F
+
+Failures:
+  1) PagesController GET 'about' should be successful
+     Failure/Error: get 'about'
+     No route matches {:controller=>"pages", :action=>"about"}
+     # ./spec/controllers/pages_controller_spec.rb:22:in `block (3 levels) in <top (required)>'
+
+Finished in 0.18705 seconds
+3 examples, 1 failure
+
+
+
+--------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[fbundle exec /home/john/.rvm/rubies/ruby-1.9.2-p290/bin/ruby -S /home/john/.rvm/gems/ruby-1.9.2-p290/gems/rspec-core-2.0.1/bin/rspec --autotest '/home/john/rails_projects/sample_app/spec/controllers/pages_controller_spec.rb'
+...
+
+Finished in 0.19318 seconds
+3 examples, 0 failures
+
+
+--------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[f^CInterrupt a second time to quit
+
+
+--------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[f^CInterrupt a second time to quit
+^C[john@FedoraDev sample_app]$ 
+
